@@ -35,7 +35,7 @@ gulp.task('default', function() {
 });
 
 function test(cover){
-  return gulp.src(['test/*.test.js'], {read: false})
+  return gulp.src(['test/**/*.test.js'], {read: false})
     .pipe(mocha({
       R: 'spec',
       c: true,
