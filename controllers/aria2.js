@@ -9,7 +9,10 @@ var aria2 = new Aria();
 
 router.get('/', function*(next){
 
-    this.body = 'fuck';
+    let gid = this.request.query.gid ? this.request.query.gid : null;
+    yield aria2.tellStatus(gid, []).then(function(result){
+        console.log(result);
+    });
 });
 
 
@@ -18,11 +21,12 @@ router.get('/', function*(next){
  */
 router.post('/', function*(next){
     //validate
-   let uris = this.request.body.uris;
+   let uris = this.request.body.uris ? this.request.body.uris : null;
+   let option = this.request.body.option ? this.request.body.option : null;
 
    let check = v.check(uris).array('uris参数必须为数组啦');
+   check = v.check(option).null().object('dir必须是json啦');
 
-   console.log(check.response)
    if(check.response.msg){
         let ret = response.handle_400(check.response.msg, check.response);
         this.body = ret.body;
@@ -33,10 +37,10 @@ router.post('/', function*(next){
 }, function*(next){
 
     let ret = null;
-    let uris = this.request.body.uris;
-    let dir = this.request.body.dir;
+    let uris = this.request.body.uris ? this.request.body.uris : null;
+    let option = this.request.body.option ? this.request.body.option : null;
 
-    yield aria2.addUri(['http://example.com/test']).then(function(result) {
+    yield aria2.addUri(uris, option).then(function(result) {
 
         ret = result;
     });
