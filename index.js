@@ -12,7 +12,12 @@ if(process.env.NODE_ENV !== 'test'){
   app.use(logger());
 }
 
-app.use(koaBody());
+app.use(koaBody({
+    multipart:true,
+    formidable: {
+        uploadDir: __dirname + '/tmp'
+    }
+}));
 app.use(router(app));
 app.use(mount('/aria2', require('./controllers/aria2.js').middleware()));
 
