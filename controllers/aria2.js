@@ -19,7 +19,7 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     let check = null;
 
     //校验
-    check = v.check(this.p_keys).null().object('keys必须是json啦');
+    check = v.check(this.p_keys).null().array('keys必须是array啦');
 
     if(check && check.response.msg){     //校验未通过
         let ret = response.handle_400(check.response.msg, check.response);
