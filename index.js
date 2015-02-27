@@ -27,4 +27,4 @@ app.use(mount('/aria2', aria2Ctrl));
 
 //module.exports = app;
 exports.app = app;
-exports.controllers = [ari2Ctrl];
+exports.controllers = [aria2Ctrl];
