@@ -6,7 +6,7 @@ if(process.env.NODE_ENV !== 'test'){
 }
 
 (function(){
-  var app = require('./').server;
+  var app = require('./').app;
   //app.use(mount('/Koanect', require('../Koanect')));
 
   module.exports = app.listen(3000);
