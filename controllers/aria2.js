@@ -108,6 +108,7 @@ router.post('/', function*(next){     //default方法
     if(check && check.response.msg){     //校验未通过
         let ret = response.handle_400(check.response.msg, check.response);
         this.body = ret.body;
+        this.type = 'json';
         return this.status = ret.status;
     }
 
