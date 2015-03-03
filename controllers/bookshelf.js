@@ -28,7 +28,7 @@ router.get('/:path', function*(next){      //default方法
     }
 
     //业务
-    let ret = bookshelf.readPath(this.p_path);
+    let ret = yield bookshelf.readPath(this.p_path).then(function(val){console.log('haha')});
     console.log('ret', ret);
     //ret = response.handle_500(ret.err, ret.response);
 
