@@ -21,10 +21,7 @@ app.use(koaBody({
     }
 }));
 
-var aria2Ctrl = require('./controllers/aria2.js').middleware();
 app.use(router(app));
-app.use(mount('/aria2', aria2Ctrl));
-
+app.use(mount('/aria2', require('./controllers/aria2.js').middleware()));
 //module.exports = app;
 exports.app = app;
-exports.controllers = [aria2Ctrl];
