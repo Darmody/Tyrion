@@ -2,7 +2,6 @@ var koa = require('koa'),
     mount = require('koa-mount'),
     router = require('koa-router'),
     logger = require('koa-logger'),
-    cors = require('koa-cors'),
     koaBody = require('koa-body'),
     app;
 
@@ -13,7 +12,10 @@ if(process.env.NODE_ENV !== 'test'){
   app.use(logger());
 }
 
-//app.use(cors());
+if(process.env.NODE_ENV === 'dev'){
+  app.use(require('koa-cors')());    
+}
+
 app.use(koaBody({
     multipart:true,
     formidable: {
