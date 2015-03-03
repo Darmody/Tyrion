@@ -13,7 +13,7 @@ if(process.env.NODE_ENV !== 'test'){
 }
 
 if(process.env.NODE_ENV === 'dev'){
-  app.use(require('koa-cors')());    
+  app.use(require('koa-cors')());
 }
 
 app.use(koaBody({
