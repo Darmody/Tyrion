@@ -13,7 +13,7 @@ if(process.env.NODE_ENV !== 'test'){
 }
 
 if(process.env.NODE_ENV === 'dev'){
-  app.use(require('koa-cors')());    
+  app.use(require('koa-cors')());
 }
 
 app.use(koaBody({
@@ -23,10 +23,8 @@ app.use(koaBody({
     }
 }));
 
-var aria2Ctrl = require('./controllers/aria2.js').middleware();
 app.use(router(app));
-app.use(mount('/aria2', aria2Ctrl));
-
+app.use(mount('/aria2', require('./controllers/aria2.js').middleware()));
+app.use(mount('/bookshelf', require('./controllers/bookshelf.js').middleware()));
 //module.exports = app;
 exports.app = app;
-exports.controllers = [aria2Ctrl];
