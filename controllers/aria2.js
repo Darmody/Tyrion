@@ -22,7 +22,7 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     check = v.check(this.p_keys).null().array('keys必须是array啦');
 
     if(check && check.response.msg){     //校验未通过
-        let ret = response.handle_400(check.response.msg, check.response);
+        let ret = response.badRequest(check.response.msg, check.response);
         this.body = ret.body;
         return this.status = ret.status;
     }
@@ -47,14 +47,14 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     check = v.check(this.p_limit).number('limit必须是数字啦');
 
     if(check && check.response.msg){     //校验未通过
-        let ret = response.handle_400(check.response.msg, check.response);
+        let ret = response.badRequest(check.response.msg, check.response);
         this.body = ret.body;
         return this.status = ret.status;
     }
 
     //业务
     let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys);
-    ret = response.handle_500(ret.err, ret.response);
+    ret = response.error(ret.err, ret.response);
 
     this.status = ret.status;
     this.body = ret.body;
@@ -74,14 +74,14 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     check = v.check(this.p_limit).number('limit必须是数字啦');
 
     if(check && check.response.msg){     //校验未通过
-        let ret = response.handle_400(check.response.msg, check.response);
+        let ret = response.badRequest(check.response.msg, check.response);
         this.body = ret.body;
         return this.status = ret.status;
     }
 
     //业务
     let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys);
-    ret = response.handle_500(ret.err, ret.response);
+    ret = response.error(ret.err, ret.response);
 
     this.status = ret.status;
     this.body = ret.body;
@@ -104,7 +104,7 @@ router.post('/', function*(next){     //default方法
     check = v.check(this.p_option).null().object('option必须是json啦');
 
     if(check && check.response.msg){     //校验未通过
-        let ret = response.handle_400(check.response.msg, check.response);
+        let ret = response.badRequest(check.response.msg, check.response);
         this.body = ret.body;
         this.type = 'json';
         return this.status = ret.status;
@@ -113,7 +113,7 @@ router.post('/', function*(next){     //default方法
     if(is.not.empty(this.request.query) && this.request.query.action != 'default') return yield next;
 
     let ret = yield aria2.addUri(this.p_uris, this.p_option);
-    ret = response.handle_500(ret.err, ret.response);
+    ret = response.error(ret.err, ret.response);
 
     this.status = ret.status;
     this.body = ret.body;
