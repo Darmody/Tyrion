@@ -29,8 +29,6 @@ router.get('/', function*(next){      //default方法, 下载中的任务
 
     //业务
     let ret = yield aria2.tellActive(this.p_keys);
-    ret = response.handle_500(ret.err, ret.response);
-
     this.status = ret.status;
     this.body = ret.body;
 

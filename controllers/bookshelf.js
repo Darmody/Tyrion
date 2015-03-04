@@ -12,7 +12,7 @@ var bookshelf = new Bookshelf();
  * 读取路径
  */
 router.get('/', function*(next){      //default方法
-    if(is.not.empty(this.request.query) && is.not.existy(this.request.query.default)) return yield next;
+    if(is.not.empty(this.request.query) && this.request.query.action != 'default') return yield next;
 
     //获取参数
     this.p_path = this.request.query.path;
@@ -29,8 +29,6 @@ router.get('/', function*(next){      //default方法
 
     //业务
     let ret = yield bookshelf.readPath(this.p_path);
-    console.log('ret', ret);
-
     this.status = ret.status;
     this.body = ret.body;
 
