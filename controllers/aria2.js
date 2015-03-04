@@ -12,7 +12,7 @@ var aria2 = new Aria();
  * 查询aria2任务
  */
 router.get('/', function*(next){      //default方法, 下载中的任务
-    if(is.not.empty(this.request.query) && is.not.existy(this.request.query.default)) return yield next;
+    if(is.not.empty(this.request.query) && this.request.query.action == 'default') return yield next;
 
     //获取参数
     this.p_keys = this.request.query.keys ? this.request.query.keys : null;
@@ -28,14 +28,14 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     }
 
     //业务
-    let ret = yield aria2.tellActive(this.p_keys).then();
+    let ret = yield aria2.tellActive(this.p_keys);
     ret = response.handle_500(ret.err, ret.response);
 
     this.status = ret.status;
     this.body = ret.body;
 
 },function*(next){      //inWait方法, 等待中的任务
-    if(is.empty(this.request.query) || is.not.existy(this.request.query.inWait)) return yield next;
+    if(is.empty(this.request.query) || this.request.query.action != 'inWait') return yield next;
 
     //获取参数
     this.p_keys = this.request.query.keys ? this.request.query.keys : null;
@@ -55,14 +55,14 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     }
 
     //业务
-    let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys).then();
+    let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys);
     ret = response.handle_500(ret.err, ret.response);
 
     this.status = ret.status;
     this.body = ret.body;
 
 },function*(next){      //inStop方法，已停止的任务
-    if(is.empty(this.request.query) || is.not.existy(this.request.query.inStop)) return yield next;
+    if(is.empty(this.request.query) || this.request.query.action != 'inStop') return yield next;
 
     //获取参数
     this.p_keys = this.request.query.keys ? this.request.query.keys : null;
@@ -82,7 +82,7 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     }
 
     //业务
-    let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys).then();
+    let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys);
     ret = response.handle_500(ret.err, ret.response);
 
     this.status = ret.status;
@@ -112,9 +112,9 @@ router.post('/', function*(next){     //default方法
         return this.status = ret.status;
     }
 
-    if(is.not.empty(this.request.query) && is.not.existy(this.request.query.default)) return yield next;
+    if(is.not.empty(this.request.query) && this.request.query.action != 'default') return yield next;
 
-    let ret = yield aria2.addUri(this.p_uris, this.p_option).then();
+    let ret = yield aria2.addUri(this.p_uris, this.p_option);
     ret = response.handle_500(ret.err, ret.response);
 
     this.status = ret.status;

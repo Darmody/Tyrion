@@ -11,11 +11,11 @@ var bookshelf = new Bookshelf();
 /**
  * 读取路径
  */
-router.get('/:path', function*(next){      //default方法
+router.get('/', function*(next){      //default方法
     if(is.not.empty(this.request.query) && is.not.existy(this.request.query.default)) return yield next;
 
     //获取参数
-    this.p_path = this.params.path;
+    this.p_path = this.request.query.path;
     let check = null;
 
     //校验
@@ -28,12 +28,11 @@ router.get('/:path', function*(next){      //default方法
     }
 
     //业务
-    let ret = yield bookshelf.readPath(this.p_path).then(function(val){console.log('haha')});
+    let ret = yield bookshelf.readPath(this.p_path);
     console.log('ret', ret);
-    //ret = response.handle_500(ret.err, ret.response);
 
-    // this.status = ret.status;
-    // this.body = ret.body;
+    this.status = ret.status;
+    this.body = ret.body;
 
 },function*(next){      //inWait方法, 等待中的任务
     if(is.empty(this.request.query) || is.not.existy(this.request.query.inWait)) return yield next;
