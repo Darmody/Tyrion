@@ -26,5 +26,12 @@ app.use(koaBody({
 app.use(router(app));
 app.use(mount('/aria2', require('./controllers/aria2.js').middleware()));
 app.use(mount('/bookshelf', require('./controllers/bookshelf.js').middleware()));
-//module.exports = app;
+
+app.use(function*(next) {
+
+    if(this.status == 403) {
+        console.log(this.body);
+    }
+});
+
 exports.app = app;
