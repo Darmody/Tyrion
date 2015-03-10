@@ -9,5 +9,5 @@ if(process.env.NODE_ENV !== 'test'){
   var app = require('./').app;
   //app.use(mount('/Koanect', require('../Koanect')));
 
-  module.exports = app.listen(4000);
+  module.exports = app.listen(4000, '0.0.0.0');
 })();

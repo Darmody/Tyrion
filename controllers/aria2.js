@@ -12,10 +12,10 @@ var aria2 = new Aria();
  * 查询aria2任务
  */
 router.get('/', function*(next){      //default方法, 下载中的任务
-    if(is.not.empty(this.request.query) && this.request.query.action == 'default') return yield next;
+    if(is.empty(this.request.query) || this.request.query.action != 'default') return yield next;
 
     //获取参数
-    this.p_keys = this.request.query.keys ? this.request.query.keys : null;
+    this.p_keys = this.request.query.keys || null;
     let check = null;
 
     //校验
@@ -24,7 +24,8 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     if(check && check.response.msg){     //校验未通过
         let ret = response.badRequest(check.response.msg, check.response);
         this.body = ret.body;
-        return this.status = ret.status;
+        this.status =ret.status;
+        return;
     }
 
     //业务
@@ -36,9 +37,9 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     if(is.empty(this.request.query) || this.request.query.action != 'inWait') return yield next;
 
     //获取参数
-    this.p_keys = this.request.query.keys ? this.request.query.keys : null;
-    this.p_skip = this.request.query.skip ? this.request.query.skip : null;
-    this.p_limit = this.request.query.limit ? this.request.query.limit : null;
+    this.p_keys = this.request.query.keys || null;
+    this.p_skip = Number(this.request.query.skip || null);
+    this.p_limit = Number(this.request.query.limit || null);
     let check = null;
 
     //校验
@@ -53,8 +54,7 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     }
 
     //业务
-    let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys);
-    ret = response.error(ret.err, ret.response);
+    let ret = yield aria2.tellWaiting(this.p_skip, this.p_limit, this.p_keys);
 
     this.status = ret.status;
     this.body = ret.body;
@@ -63,9 +63,9 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     if(is.empty(this.request.query) || this.request.query.action != 'inStop') return yield next;
 
     //获取参数
-    this.p_keys = this.request.query.keys ? this.request.query.keys : null;
-    this.p_skip = this.request.query.skip ? this.request.query.skip : null;
-    this.p_limit = this.request.query.limit ? this.request.query.limit : null;
+    this.p_keys = this.request.query.keys || null;
+    this.p_skip = Number(this.request.query.skip || null);
+    this.p_limit = Number(this.request.query.limit || null);
     let check = null;
 
     //校验
@@ -80,8 +80,7 @@ router.get('/', function*(next){      //default方法, 下载中的任务
     }
 
     //业务
-    let ret = yield aria2.tellActive(this.p_skip, this.p_limit, this.p_keys);
-    ret = response.error(ret.err, ret.response);
+    let ret = yield aria2.tellStopped(this.p_skip, this.p_limit, this.p_keys);
 
     this.status = ret.status;
     this.body = ret.body;
@@ -113,7 +112,6 @@ router.post('/', function*(next){     //default方法
     if(is.not.empty(this.request.query) && this.request.query.action != 'default') return yield next;
 
     let ret = yield aria2.addUri(this.p_uris, this.p_option);
-    ret = response.error(ret.err, ret.response);
 
     this.status = ret.status;
     this.body = ret.body;
